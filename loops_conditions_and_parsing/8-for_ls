@@ -1,0 +1,9 @@
+#!/bin/bash
+
+for file in *; do
+    # Skip if it's a directory (optional but cleaner)
+    [ -f "$file" ] || continue
+
+    # Remove everything up to the first dash
+    echo "${file#*-}"
+done
