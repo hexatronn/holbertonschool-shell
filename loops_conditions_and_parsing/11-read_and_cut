@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-
+# this script displays  /etc/passwd's only username,user id and home directory
 while IFS=: read -r username _ userid _ _ home _; do
     echo "${username}:${userid}:${home}"
 done < /etc/passwd
