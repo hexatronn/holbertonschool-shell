@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+# This script saves its PID, prints endlessly, and handles SIGINT/SIGTERM/SIGQUIT signals
+
+PID_FILE="/var/run/myscript.pid"
+
+echo "$$" > "$PID_FILE"
+
+trap 'echo "Y U no love me?!";' INT
+trap 'echo "I hate the kill command"; rm -f "$PID_FILE"; exit' TERM
+trap 'rm -f "$PID_FILE"; exit' QUIT
+
+while true
+do
+    echo "To infinity and beyond"
+    sleep 2
+done
