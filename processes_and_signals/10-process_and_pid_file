@@ -1,31 +1,16 @@
 #!/usr/bin/env bash
 # This script saves its PID, prints endlessly, and handles SIGINT/SIGTERM/SIGQUIT signals
 
-PID_FILE="/var/run/myscript.pid"
+echo "$$" > /var/run/myscript.pid
 
-echo "$$" > "$PID_FILE"
-
-on_sigint() {
-    echo "Y U no love me?!"
-}
-
-cleanup_and_exit() {
-    [ -f "$PID_FILE" ] && rm -f "$PID_FILE"
-    exit 0
-}
-
-on_sigterm() {
-    echo "I hate the kill command"
-    cleanup_and_exit
-}
-
-trap 'on_sigint' INT
-trap 'on_sigterm' TERM
-trap 'cleanup_and_exit' QUIT
+trap 'echo "Y U no love me?!";' INT
+trap 'echo "I hate the kill command"; rm -f /var/run/myscript.pid; exit 0' TERM
+trap 'rm -f /var/run/myscript.pid; exit 0' QUIT
 
 while true
 do
     echo "To infinity and beyond"
     sleep 2
 done
+
 
