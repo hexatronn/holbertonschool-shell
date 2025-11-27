@@ -5,12 +5,27 @@ PID_FILE="/var/run/myscript.pid"
 
 echo "$$" > "$PID_FILE"
 
-trap 'echo "Y U no love me?!";' INT
-trap 'echo "I hate the kill command"; rm -f "$PID_FILE"; exit' TERM
-trap 'rm -f "$PID_FILE"; exit' QUIT
+on_sigint() {
+    echo "Y U no love me?!"
+}
+
+cleanup_and_exit() {
+    [ -f "$PID_FILE" ] && rm -f "$PID_FILE"
+    exit 0
+}
+
+on_sigterm() {
+    echo "I hate the kill command"
+    cleanup_and_exit
+}
+
+trap 'on_sigint' INT
+trap 'on_sigterm' TERM
+trap 'cleanup_and_exit' QUIT
 
 while true
 do
     echo "To infinity and beyond"
     sleep 2
 done
+
