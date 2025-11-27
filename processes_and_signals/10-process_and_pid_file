@@ -1,28 +1,24 @@
 #!/usr/bin/env bash
-# Script that writes its PID to a file and handles signals.
+# Script that writes its PID file and handles INT, TERM and QUIT signals.
 
 pid_file="/var/run/myscript.pid"
-
-echo "$$" > "$pid_file"
 
 cleanup() {
     rm -f "$pid_file"
     exit
 }
 
-term_handler() {
-    echo "I hate the kill command"
-    cleanup
-}
-
 trap 'echo "Y U no love me?!";' INT
-trap 'term_handler' TERM
+trap 'echo "I hate the kill command"; cleanup' TERM
 trap 'cleanup' QUIT
 
-while :; do
+echo "$$" > "$pid_file"
+
+while true; do
     echo "To infinity and beyond"
     sleep 2
 done
+
 
 
 
